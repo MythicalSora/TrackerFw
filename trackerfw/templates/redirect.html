@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tracker Blocked</title>
+</head>
+<body>
+
+    <h2>Tracker blocked by <strong>TrackerFW</strong></h2>
+
+    <div>
+        Redirecting to url..
+    </div>
+
+    <script type="text/javascript">
+    setTimeout(function() {
+        document.location.href = '{{ redirect_url }}';
+    }, 2000);
+    </script>
+    
+</body>
+</html>

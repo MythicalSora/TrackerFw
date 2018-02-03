@@ -1,3 +1,5 @@
+import aiohttp_jinja2
+
 from aiohttp import web
 from trackerfw.module import Module
 from trackerfw.route import Route
@@ -13,8 +15,11 @@ class TraceDoubler(Module):
             path='/click'
         )
 
+    @aiohttp_jinja2.template('redirect.html')
     async def handler(self, request):
-        return web.HTTPTemporaryRedirect(request.query['url'])
+        return {
+            'redirect_url': request.query['url']
+        }
 
 class MailRD(Module):
     @property

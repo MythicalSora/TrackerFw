@@ -23,8 +23,9 @@ class MatchInfo(AbstractMatchInfo):
 
     @contextmanager
     def set_current_app(self, app):
-        yield
         self._current_app = app
+        yield
+        self._current_app = None
 
     @property
     def expect_handler(self):

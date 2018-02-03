@@ -1,5 +1,7 @@
 import os
+import jinja2
 import importlib.util
+import aiohttp_jinja2
 
 from aiohttp import web
 from urllib.parse import unquote, urlparse
@@ -44,7 +46,7 @@ def run(argv):
                 host=uri.netloc.split(':')[0]
             )
 
-            router = request.match_info.app.router
+            router = request.match_info.current_app.router
             match_info = await router.resolve(new_request)
 
             return await match_info.handler(new_request)
@@ -56,6 +58,11 @@ def run(argv):
         middlewares=[
             reroute
         ]
+    )
+
+    aiohttp_jinja2.setup(
+        app,
+        loader=jinja2.PackageLoader('trackerfw', 'templates')
     )
 
     return app

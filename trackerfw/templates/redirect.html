@@ -10,6 +10,7 @@
 
     <h2>Tracker blocked by <strong>TrackerFW</strong></h2>
 
+    {% if redirect_url %}
     <div>
         Redirecting to url..
     </div>
@@ -19,6 +20,11 @@
         document.location.href = '{{ redirect_url }}';
     }, 2000);
     </script>
+    {% else %}
+    <div>
+        Unknown URL: <pre>{{ url }}</pre>
+    </div>
+    {% endif %}
     
 </body>
 </html>

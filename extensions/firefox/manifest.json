@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    "name": "TrackerFW",
+    "version": "0.1",
+
+    "description": "TrackerFW - firewall for trackers",
+
+    "icons": {
+        "48": "icons/border-48.png"
+    },
+
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "webNavigation",
+        "<all_urls>"
+    ],
+
+    "background": {
+        "scripts": ["axios.min.js", "proxy.js"]
+    }
+}

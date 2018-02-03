@@ -14,7 +14,7 @@ class Router(AbstractRouter):
             if route.matches(request):
                 return MatchInfo(route)
 
-        return None
+        return MatchInfo()
 
     def add(self, handler, **kwargs):
         self.routes.append(Route(handler, **kwargs))

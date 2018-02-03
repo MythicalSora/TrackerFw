@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python -m aiohttp.web trackerfw.webserver:run -P 9999

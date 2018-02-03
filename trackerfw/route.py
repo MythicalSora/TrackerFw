@@ -3,6 +3,18 @@ class Route(object):
         self.filters = kwargs
         self.handler = handler
 
+    @property
+    def pattern(self):
+        if not 'hostname' in self.filters:
+            return None
+
+        pattern = '*://' + self.filters['hostname']
+
+        if 'path' in self.filters:
+            pattern += self.filters['path'] + '*'
+
+        return pattern
+
     def matches(self, request):
         if 'hostname' in self.filters and \
             self.filters['hostname'] != request.host:

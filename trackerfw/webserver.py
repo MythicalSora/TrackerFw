@@ -1,4 +1,5 @@
 import os
+import ssl
 import jinja2
 import importlib.util
 import aiohttp_jinja2
@@ -27,7 +28,7 @@ def discover():
 
         yield from load_modules(basedir, file[:-3])
 
-def run(argv):
+def make_app():
     router = Router()
 
     for module in discover():
@@ -66,3 +67,16 @@ def run(argv):
     )
 
     return app
+
+ssl_ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+ssl_ctx.load_cert_chain(
+    './certs/cert.pem',
+    './certs/key.pem'
+)
+
+web.run_app(
+    make_app(),
+    port=9999,
+    ssl_context=ssl_ctx,
+    host='localhost',
+)

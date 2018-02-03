@@ -12,6 +12,8 @@ class Route(object):
 
         if 'path' in self.filters:
             pattern += self.filters['path'] + '*'
+        else:
+            pattern += '/*'
 
         return pattern
 

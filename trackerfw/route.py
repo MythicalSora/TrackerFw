@@ -1,3 +1,5 @@
+import re
+
 class Route(object):
     def __init__(self, handler, **kwargs):
         self.filters = kwargs
@@ -11,18 +13,24 @@ class Route(object):
         pattern = '*://' + self.filters['hostname']
 
         if 'path' in self.filters:
-            pattern += self.filters['path'] + '*'
+            pattern += self.filters['path'] + '*' if self.filters['path'][-1] != '*' else self.filters['path']
         else:
             pattern += '/*'
 
         return pattern
 
+    def pattern_matches(self, pattern, value):
+        if not '*' in pattern:
+            return pattern == value
+
+        return re.match(pattern.replace('*', '.*'), value) != None
+
     def matches(self, request):
         if 'hostname' in self.filters and \
-            self.filters['hostname'] != request.host:
+            not self.pattern_matches(self.filters['hostname'], request.host):
             return False
         elif 'path' in self.filters and \
-            self.filters['path'] != request.path:
+            not self.pattern_matches(self.filters['path'], request.path):
             return False
 
         return True

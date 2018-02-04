@@ -1,0 +1,21 @@
+routes:
+  - name: Google Tag Services
+    route: www.googletagservices.com/tag/*
+
+  - name: ActiveCampaign
+    route: trackcmp.net/visit
+
+  - name: MarkMonitor
+    route: beacon.krxd.net/*
+
+  - name: Gigya
+    route: cdns.gigya.com/js/gigya.js
+    file: gigya.js
+
+  - name: Google Tag Manager
+    route: www.googletagmanager.com/gtm.js
+    file: gtm.js
+
+  - name: Zopim Chat
+    route: "*.zopim.com/"
+    file: zopim.js

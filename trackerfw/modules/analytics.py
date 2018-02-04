@@ -2,10 +2,11 @@ import aiohttp_jinja2
 
 from aiohttp import web
 from trackerfw.route import Route
+from trackerfw.module import Module
 
-__all__ = ['GoogleTagManager', 'CancelPixels']
+__all__ = ['CancelPixelsBeacons', 'StaticScripts']
 
-class CancelPixels(object):
+class CancelPixelsBeacons(Module):
     @property
     def routes(self):
         # Google tag services
@@ -22,20 +23,29 @@ class CancelPixels(object):
             path='/visit'
         )
 
-    async def handler(self, request):
-        return web.Response(text='')
-
-class GoogleTagManager(object):
-    @property
-    def routes(self):
+        # MarkMonitor
         yield Route(
             self.handler,
-            hostname='www.googletagmanager.com',
-            path='/gtm.js'
+            hostname='beacon.krxd.net',
+            path='/*'
         )
 
     async def handler(self, request):
-        return web.Response(
-            text=aiohttp_jinja2.render_string('gtm.js', request, {}),
-            content_type='text/javascript'
+        return web.HTTPBadRequest()
+
+class StaticScripts(Module):
+    @property
+    def routes(self):
+        # Gigya
+        yield Route(
+            self.serve_file('gigya.js', 'text/javascript'),
+            hostname='cdns.gigya.com',
+            path='/js/gigya.js'
+        )
+
+        # Google Tag Manager
+        yield Route(
+            self.serve_file('gtm.js', 'text/javascript'),
+            hostname='www.googletagmanager.com',
+            path='/gtm.js'
         )

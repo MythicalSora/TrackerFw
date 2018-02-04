@@ -19,3 +19,19 @@ routes:
   - name: Zopim Chat
     route: "*.zopim.com/"
     file: zopim.js
+
+  - name: Tealium
+    route: tags.tiqcdn.com/utag/*
+    file: utag.js
+
+  - name: Visual Web Optimizer
+    route: dev.visualwebsiteoptimizer.com/j.php
+    file: vwo.js
+
+  - name: Optimizely
+    route: cdn.optimizely.com/js/*
+    file: optimizely.js
+
+  - name: NewRelic
+    route: js-agent.newrelic.com/*
+    # file: new-relic.js

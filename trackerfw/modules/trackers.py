@@ -45,11 +45,22 @@ class Trackers(Module):
 
         if '.js' in filename:
             content_type = 'text/javascript'
+        elif '.json' in filename:
+            content_type = 'application/json'
 
         async def handler(request):
+            headers = {
+                'Access-Control-Allow-Origin': request.scheme + '://' + request.host,
+                'Access-Control-Allow-Credentials': 'true'
+            }
+
+            if 'Access-Control-Request-Headers' in request.headers:
+                headers['Access-Control-Allow-Headers'] = request.headers['Access-Control-Request-Headers']
+
             return web.Response(
                 text=aiohttp_jinja2.render_string(filename, request, {}),
-                content_type=content_type
+                content_type=content_type,
+                headers=headers
             )
 
         return handler

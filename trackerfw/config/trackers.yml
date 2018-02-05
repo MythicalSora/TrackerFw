@@ -69,6 +69,11 @@ routes:
   - name: DoubleClick
     route: stats.g.doubleclick.net/r/collect
 
+  - name: YouTube Event Logger
+    routes:
+      - www.youtube.com/youtubei/v1/log_event
+      - www.youtube.com/youtubei/v1/log_interaction
+    file: youtube-log-event.json
+
   - name: NewRelic
     route: js-agent.newrelic.com/*
-    # file: new-relic.js

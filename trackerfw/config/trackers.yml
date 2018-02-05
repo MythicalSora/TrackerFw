@@ -46,6 +46,29 @@ routes:
   - name: JWPlayer
     route: jwpltx.com/*
 
+  - name: Marktplaats
+    route: p.marktplaats.net/*
+
+  - name: Google Adsense
+    route: www.google.com/adsense/*
+    file: adsense.js
+
+  - name: Google Audiences
+    route: www.google.com/ads/ga-audiences
+
+  - name: Google Analytics
+    route: www.google-analytics.com/analytics.js
+    file: analytics.js
+
+  - name: Google Analytics Plugins
+    route: www.google-analytics.com/plugins/*
+
+  - name: Google Analytics Measurements
+    route: www.google-analytics.com/collect
+
+  - name: DoubleClick
+    route: stats.g.doubleclick.net/r/collect
+
   - name: NewRelic
     route: js-agent.newrelic.com/*
     # file: new-relic.js

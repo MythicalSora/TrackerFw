@@ -1,11 +1,20 @@
 routes:
-  - name: Google Tag Services
-    route: www.googletagservices.com/tag/*
-
-  - name: Google Ad Services
+  - name: Google Ads
     routes:
       - www.googleadservices.com/pagead/*
       - adservice.google.com/*
+      - "*.googlesyndication.com/pagead/*"
+
+  - name: DoubleClick
+    routes:
+      - stats.g.doubleclick.net/r/collect
+      - cm.g.doubleclick.net/pixel
+
+  - name: Google Ads (GoogleTag)
+    routes:
+      - securepubads.g.doubleclick.net/*
+      - www.googletagservices.com/tag/*
+    file: doubleclick-pubads.js
 
   - name: ActiveCampaign
     route: trackcmp.net/visit
@@ -44,7 +53,9 @@ routes:
     route: sb.scorecardresearch.com/*
 
   - name: Chartbeat
-    route: static.chartbeat.com/js/*
+    routes:
+      - static.chartbeat.com/js/*
+      - ping.chartbeat.net/ping
 
   - name: YieldPro/Ancora
     routes:
@@ -73,9 +84,6 @@ routes:
 
   - name: Google Analytics Measurements
     route: www.google-analytics.com/collect
-
-  - name: DoubleClick
-    route: stats.g.doubleclick.net/r/collect
 
   - name: YouTube Event Logger
     routes:
@@ -109,7 +117,107 @@ routes:
       - "*.effectivemeasure.net/html/*"
 
   - name: Outbrain
-    route: amplifypixel.outbrain.com/pixel
+    routes:
+      - amplifypixel.outbrain.com/pixel
+      - widgets.outbrain.com/external/*
 
   - name: WpDigital
     route: "*.wpdigital.net/metrics*"
+
+  - name: Twitter Analytics
+    routes:
+      - analytics.twitter.com/*
+      - syndication.twitter.com/*
+
+  - name: Hotjar
+    route: static.hotjar.com/*
+    file: hotjar.js
+
+  - name: Hotjar Block
+    route: vars.hotjar.com/*
+
+  - name: Usabila
+    route: w.usabilla.com/*
+
+  - name: AdTech
+    routes:
+      - aka-cdn.adtech.de/*
+      - adserver.adtech.de/*
+
+  - name: Google Interactive Media Ads
+    route: imasdk.googleapis.com/*
+
+  - name: AppNexus
+    route: "*.adnxs.com/*"
+
+  - name: Gravity R&D
+    route: "*.gravityrd-services.com/*"
+
+  - name: Blendle
+    route: events.blendle.com/*
+
+  - name: Persgroep Statistics
+    route: stats.persgroep.nl/*
+
+  - name: Browserupdate
+    route: browser-update.org/update.min.js
+
+  - name: TypeKit tracker
+    route: p.typekit.net/p.gif
+
+  - name: Facebook
+    routes:
+      - www.facebook.com/plugins/like.php
+      - connect.facebook.net/*
+      - www.facebook.com/tr
+
+  - name: MSN Pixels
+    route: "*.msn.com/c.gif"
+
+  - name: Akamai Beacon
+    route: "*.akstat.io/*"
+
+  - name: ING Monitor
+    route: mon.ingbank.nl/*
+
+  - name: Tucows
+    routes:
+      - t.svtrd.com/*
+      - tdn.r42tag.com/*
+
+  - name: Vimeo Player Stats
+    route: "*.vimeocdn.com/add/player-stats"
+
+  - name: ABTasty (A/B testing)
+    route: try.abtasty.com/*
+
+  - name: BlueConic
+    route: cdn.blueconic.net/*
+
+  - name: Lotame (CrowdControl)
+    route: tags.crwdcntrl.net/*
+
+  - name: Sizmek Advertising Server
+    route: "*.serving-sys.com/serving/*"
+
+  - name: Booking.com Tracking
+    routes:
+      - www.booking.com/js_tracking
+      - www.booking.com/navigation_times
+      - cexp.booking.com/*
+      - q-ak.bstatic.com/speedtest.png
+
+  - name: GroupeSeb International Development
+    route: receiver.analytics.groupe-seb.com/events/*
+
+  - name: TagCommander/Commanders ACT
+    route: cdn.tagcommander.com/*
+
+  - name: AddToAny
+    route: static.addtoany.com/*
+
+  - name: Twitter
+    route: platform.twitter.com/widgets.js
+
+  - name: Google+ PlusOne
+    route: apis.google.com/js/plusone.js

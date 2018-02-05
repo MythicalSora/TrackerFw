@@ -39,7 +39,7 @@ class Trackers(Module):
 
     def get_cors_headers(self, request):
         headers = {
-            'Access-Control-Allow-Origin': request.scheme + '://' + request.host,
+            'Access-Control-Allow-Origin': '*', # @TODO: Fix 'target' hostname, => request.scheme + '://' + request.host,
             'Access-Control-Allow-Credentials': 'true'
         }
 

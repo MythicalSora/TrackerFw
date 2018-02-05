@@ -33,7 +33,8 @@ gigya.abTesting = null;
 gigya.samlConfig = null;
 gigya.accounts = {
     addEventHandlers: function() {},
-    getAccountInfo: function() {}
+    getAccountInfo: function() {},
+    verifyLogin: function() {}
 };
 gigya.external = {
     facebook: {}

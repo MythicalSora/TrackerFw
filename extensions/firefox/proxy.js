@@ -1,7 +1,25 @@
 var beforeListener;
+var trackers = {};
 
 function proxyRequest(details) {
     console.log('> proxy: ' + details.url);
+
+    if (!trackers[details.tabId]) {
+        trackers[details.tabId] = 0;
+    }
+
+    trackers[details.tabId]++;
+
+    browser.runtime.sendMessage({
+        type: 'update-tracker-count',
+        tab_id: details.tabId,
+        count: trackers[details.tabId]
+    });
+
+    browser.browserAction.setBadgeText({
+        text: trackers[details.tabId].toString(),
+        tabId: details.tabId
+    });
 
     return {
         redirectUrl: 'https://localhost:9999/$route?uri=' + encodeURIComponent(details.url),
@@ -35,20 +53,40 @@ function loadPatterns(callback) {
     });
 }
 
-function showNotification(tab) {
-    loadPatterns((e, data) => {
-        console.log('> load-patterns', data);
+browser.runtime.onMessage.addListener(message => {
+    console.log('> got message: ' + message.type);
 
-        browser.notifications.create('trackerfw.notify', {
-            'type': 'basic',
-            'iconUrl': browser.extension.getURL('icons/border-48.png'),
-            'title': 'TrackerFW',
-            'message': e === null ? 'Loaded ' + data.length + ' patterns' : 'No patterns loaded'
-        });
-    });
-}
+    switch (message.type) {
+        case 'reload':
+            loadPatterns((e, data) => {
+                console.log('> load-patterns', data);
+        
+                browser.notifications.create('trackerfw.notify', {
+                    'type': 'basic',
+                    'iconUrl': browser.extension.getURL('icons/TrackerFW-48.png'),
+                    'title': 'TrackerFw',
+                    'message': e === null ? 'Loaded ' + data.length + ' patterns' : 'No patterns loaded'
+                });
+            });
+            break;
 
-browser.browserAction.onClicked.addListener(showNotification);
+        case 'send-tracker-count':
+            browser.runtime.sendMessage({
+                tab_id: message.tab_id,
+                type: 'update-tracker-count',
+                count: trackers[message.tab_id]
+            });
+            break;
+    }
+});
+
+browser.webNavigation.onBeforeNavigate.addListener(details => {
+    trackers[details.tabId] = 0;
+});
+
+browser.browserAction.setBadgeBackgroundColor({
+    color: '#444'
+});
 
 loadPatterns((e, data) => {
     console.log('> load-patterns', data);

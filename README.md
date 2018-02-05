@@ -1,4 +1,4 @@
-# TrackerFw - <small>Intelligent Firewall for trackers</small>
+# ![Logo](extensions/firefox/icons/TrackerFW-48.png) TrackerFw - <small>Intelligent Firewall for trackers</small>
 
 **Note: This open-source project is stable but not ready for production usage**
 

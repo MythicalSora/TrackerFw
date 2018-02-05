@@ -3,13 +3,18 @@ routes:
     route: www.googletagservices.com/tag/*
 
   - name: Google Ad Services
-    route: www.googleadservices.com/pagead/*
+    routes:
+      - www.googleadservices.com/pagead/*
+      - adservice.google.com/*
 
   - name: ActiveCampaign
     route: trackcmp.net/visit
 
   - name: MarkMonitor
-    route: beacon.krxd.net/*
+    routes:
+      - beacon.krxd.net/*
+      - cdn.krxd.net/controltag
+      - cdn.krxd.net/userdata/*
 
   - name: Gigya
     route: cdns.gigya.com/js/gigya.js
@@ -83,3 +88,28 @@ routes:
 
   - name: NewRelic
     route: js-agent.newrelic.com/*
+
+  - name: Index Exchange Marketing
+    routes:
+      - js-sec.indexww.com/*
+      - as-sec.casalemedia.com/*
+
+  - name: ArcPublishing
+    route: cdn-api.arcpublishing.com/*
+
+  - name: TrustX Advertisement
+    route: sofia.trustx.org/*
+
+  - name: Amazon Adsystem
+    route: "*.amazon-adsystem.com/*"
+
+  - name: EffectiveMeasure
+    routes:
+      - "*.effectivemeasure.net/em.js"
+      - "*.effectivemeasure.net/html/*"
+
+  - name: Outbrain
+    route: amplifypixel.outbrain.com/pixel
+
+  - name: WpDigital
+    route: "*.wpdigital.net/metrics*"

@@ -42,7 +42,7 @@ def make_app():
             uri = urlparse(raw_uri)
             new_request = request.clone(
                 rel_url=raw_uri,
-                method='GET',
+                method=request.method,
                 scheme=uri.scheme,
                 host=uri.netloc.split(':')[0]
             )

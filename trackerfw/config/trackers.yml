@@ -2,6 +2,9 @@ routes:
   - name: Google Tag Services
     route: www.googletagservices.com/tag/*
 
+  - name: Google Ad Services
+    route: www.googleadservices.com/pagead/*
+
   - name: ActiveCampaign
     route: trackcmp.net/visit
 
@@ -74,6 +77,9 @@ routes:
       - www.youtube.com/youtubei/v1/log_event
       - www.youtube.com/youtubei/v1/log_interaction
     file: youtube-log-event.json
+
+  - name: YouTube Stats Beacon
+    route: www.youtube.com/api/stats/*
 
   - name: NewRelic
     route: js-agent.newrelic.com/*

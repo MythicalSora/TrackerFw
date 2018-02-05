@@ -37,8 +37,27 @@ class Trackers(Module):
                         path='/' + path
                     )
 
+    def get_cors_headers(self, request):
+        headers = {
+            'Access-Control-Allow-Origin': request.scheme + '://' + request.host,
+            'Access-Control-Allow-Credentials': 'true'
+        }
+
+        if 'Access-Control-Request-Headers' in request.headers:
+            headers['Access-Control-Allow-Headers'] = request.headers['Access-Control-Request-Headers']
+
+        return headers
+
     async def cancel_handler(self, request):
-        return web.HTTPBadRequest()
+        if request.method == 'OPTIONS':
+            return web.Response(
+                status=200,
+                headers=self.get_cors_headers(request)
+            )
+
+        return web.HTTPBadRequest(
+            headers=self.get_cors_headers(request)
+        )
 
     def file_handler(self, filename):
         content_type = 'text/plain'
@@ -49,18 +68,10 @@ class Trackers(Module):
             content_type = 'application/json'
 
         async def handler(request):
-            headers = {
-                'Access-Control-Allow-Origin': request.scheme + '://' + request.host,
-                'Access-Control-Allow-Credentials': 'true'
-            }
-
-            if 'Access-Control-Request-Headers' in request.headers:
-                headers['Access-Control-Allow-Headers'] = request.headers['Access-Control-Request-Headers']
-
             return web.Response(
                 text=aiohttp_jinja2.render_string(filename, request, {}),
                 content_type=content_type,
-                headers=headers
+                headers=self.get_cors_headers(request)
             )
 
         return handler

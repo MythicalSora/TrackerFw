@@ -14,18 +14,28 @@ class Trackers(Module):
             config = yaml.load(file.read())
 
             for route in config['routes']:
-                if 'file' in route:
-                    handler = self.file_handler(route['file'])
+                routes = []
+
+                if 'routes' in route:
+                    routes = route['routes']
+                elif 'route' in route:
+                    routes = [route['route']]
                 else:
-                    handler = self.cancel_handler
+                    continue
 
-                hostname, path = route['route'].split('/', 1)
+                for pattern in routes:
+                    if 'file' in route:
+                        handler = self.file_handler(route['file'])
+                    else:
+                        handler = self.cancel_handler
 
-                yield Route(
-                    handler,
-                    hostname=hostname,
-                    path='/' + path
-                )
+                    hostname, path = pattern.split('/', 1)
+
+                    yield Route(
+                        handler,
+                        hostname=hostname,
+                        path='/' + path
+                    )
 
     async def cancel_handler(self, request):
         return web.HTTPBadRequest()

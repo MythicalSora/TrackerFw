@@ -32,6 +32,20 @@ routes:
     route: cdn.optimizely.com/js/*
     file: optimizely.js
 
+  - name: Scorecard Research
+    route: sb.scorecardresearch.com/*
+
+  - name: Chartbeat
+    route: static.chartbeat.com/js/*
+
+  - name: YieldPro/Ancora
+    routes:
+      - adserving.ancoraplatform.com/*
+      - creatives.ancoraplatform.com/*
+
+  - name: JWPlayer
+    route: jwpltx.com/*
+
   - name: NewRelic
     route: js-agent.newrelic.com/*
     # file: new-relic.js

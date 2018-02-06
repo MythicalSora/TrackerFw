@@ -2,8 +2,26 @@
 
 **Note: This open-source project is stable but not ready for production usage**
 
+## Installation
+Since TrackerFw is work-in-progress we haven't created official builds yet nor have we published it to pypi.
+If you want to check it out you can install it using the following steps:
+
+### Webserver
+```bash
+git clone https://github.com/PrivacySec/TrackerFw.git
+cd TrackerFw
+pip install -e .
+```
+
+After this you can run the webserver using the `trackerfw` command.
+There is also a systemd service file present in the project.
+
+### Browser plugin
+Only the Firefox browser plugin is available at the moment but it will be ported to Google Chrome as well (which should be quite easy since they seem to use the same webExtensions API).
+We hope to release first version of the browser plugin this week however you can load it as a temporary extension (see Mozilla website for more information).
+
 ## What?
-TrackerFW is a software firewall for trackers. It includes a browser plugin which routes all traffic that invades the user its privacy to a local python server. Instead of only cancelling all bad traffic we want to make sure most (if not all) websites keep working but just don't invade your privacy.
+TrackerFw is a software firewall for trackers. It includes a browser plugin which routes all traffic that invades the user its privacy to a local python server. Instead of only cancelling all bad traffic we want to make sure most (if not all) websites keep working but just don't invade your privacy.
 
 TrackerFW **is not** an ad-blocker but a tracker-blocker. It's often used in combination with uBlock Origin.
 

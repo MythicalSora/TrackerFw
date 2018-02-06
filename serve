@@ -1,3 +1,0 @@
-#!/bin/bash
-
-export $(cat .env | xargs) && python -c 'import trackerfw; trackerfw.main()'

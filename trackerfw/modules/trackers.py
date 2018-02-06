@@ -10,7 +10,7 @@ __all__ = ['Trackers']
 class Trackers(Module):
     @property
     def routes(self):
-        with open('./trackerfw/config/trackers.yml', 'r') as file:
+        with open(self.basedir + 'config/trackers.yml', 'r') as file:
             config = yaml.load(file.read())
 
             for route in config['routes']:

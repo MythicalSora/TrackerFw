@@ -1,4 +1,8 @@
-from trackerfw.webserver import run_app
+from trackerfw.webserver import Webserver
 
 def main():
-    run_app()
+    server = Webserver()
+    server.listen(
+        'localhost',
+        9999
+    )

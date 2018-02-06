@@ -8,35 +8,50 @@ from aiohttp import web
 from urllib.parse import unquote, urlparse
 from trackerfw.router import Router
 
-def load_modules(basedir, name):
-    spec = importlib.util.spec_from_file_location(
-        name,
-        basedir + '/modules/' + name + '.py'
-    )
-    py_module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(py_module)
+class Webserver(object):
+    def __init__(self):
+        self._modules = None
+        self.router = Router()
+        self._ssl_context = None
+        self.basedir = os.path.dirname(os.path.realpath(__file__)) + '/'
 
-    for key in py_module.__all__:
-        yield getattr(py_module, key)()
+    def _load_modules(self, name):
+        spec = importlib.util.spec_from_file_location(
+            name,
+            self.basedir + '/modules/' + name + '.py'
+        )
+        py_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(py_module)
 
-def discover():
-    basedir = os.path.dirname(os.path.realpath(__file__))
+        for key in py_module.__all__:
+            yield getattr(py_module, key)(self.basedir)
 
-    for file in os.listdir(basedir + '/modules/'):
-        if '__' in file:
-            continue
+    @property
+    def ssl_context(self):
+        if self._ssl_context == None:
+            self._ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+            self._ssl_context.load_cert_chain(
+                self.basedir + 'certs/cert.pem',
+                self.basedir + 'certs/key.pem'
+            )
 
-        yield from load_modules(basedir, file[:-3])
+        return self._ssl_context
 
-def make_app():
-    router = Router()
+    @property
+    def modules(self):
+        if self._modules == None:
+            self._modules = []
 
-    for module in discover():
-        for route in module.routes:
-            router.routes.append(route)
+            for file in os.listdir(self.basedir + '/modules/'):
+                if '__' in file:
+                    continue
+
+                self._modules += [m for m in self._load_modules(file[:-3])]
+
+        return self._modules
 
     @web.middleware
-    async def reroute(request, handler):
+    async def reroute(self, request, handler):
         if request.path == '/$route':
             raw_uri = unquote(request.query['uri'])
             uri = urlparse(raw_uri)
@@ -54,30 +69,26 @@ def make_app():
 
         return await handler(request)
 
-    app = web.Application(
-        router=router,
-        middlewares=[
-            reroute
-        ]
-    )
+    def listen(self, host, port):
+        for module in self.modules:
+            for route in module.routes:
+                self.router.routes.append(route)
 
-    aiohttp_jinja2.setup(
-        app,
-        loader=jinja2.PackageLoader('trackerfw', 'templates')
-    )
+        app = web.Application(
+            router=self.router,
+            middlewares=[
+                self.reroute
+            ]
+        )
 
-    return app
+        aiohttp_jinja2.setup(
+            app,
+            loader=jinja2.PackageLoader('trackerfw', 'templates')
+        )
 
-def run_app():
-    ssl_ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-    ssl_ctx.load_cert_chain(
-        './certs/cert.pem',
-        './certs/key.pem'
-    )
-
-    web.run_app(
-        make_app(),
-        port=9999,
-        ssl_context=ssl_ctx,
-        host='localhost',
-    )
+        web.run_app(
+            app,
+            port=port,
+            host=host,
+            ssl_context=self.ssl_context
+        )

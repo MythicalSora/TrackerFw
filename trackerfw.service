@@ -3,10 +3,8 @@ Description=TrackerFW
 
 [Service]
 Type=simple
-User=dmeijboom
-WorkingDirectory=/home/dmeijboom/Development/TrackerFw/
 StandardOutput=journal+console
-ExecStart=/home/dmeijboom/Development/TrackerFw/serve
+ExecStart=/bin/trackerfw
 Restart=always
 RestartSec=3
 

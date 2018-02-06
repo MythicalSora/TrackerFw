@@ -33,3 +33,7 @@ The browser plugin fetches a list of URL patterns from a locally installed Pytho
 - Auto-install SSL certificate for local webserver
 - Auto remove URL parts that invade privacy (UTM codes etc.)
 - Add A LOT of trackers
+
+## Python
+The webserver is written in Python, you need at least python 3.5 or higher.
+We will **never** support Python 2.

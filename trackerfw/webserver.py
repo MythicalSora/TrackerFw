@@ -6,7 +6,7 @@ import aiohttp_jinja2
 
 from aiohttp import web
 from urllib.parse import unquote, urlparse
-from .router import Router
+from trackerfw.router import Router
 
 def load_modules(basedir, name):
     spec = importlib.util.spec_from_file_location(
@@ -68,15 +68,16 @@ def make_app():
 
     return app
 
-ssl_ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-ssl_ctx.load_cert_chain(
-    './certs/cert.pem',
-    './certs/key.pem'
-)
+def run_app():
+    ssl_ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+    ssl_ctx.load_cert_chain(
+        './certs/cert.pem',
+        './certs/key.pem'
+    )
 
-web.run_app(
-    make_app(),
-    port=9999,
-    ssl_context=ssl_ctx,
-    host='localhost',
-)
+    web.run_app(
+        make_app(),
+        port=9999,
+        ssl_context=ssl_ctx,
+        host='localhost',
+    )

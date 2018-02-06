@@ -1,3 +1,4 @@
+from aiohttp import web
 from aiohttp.abc import AbstractRouter
 
 from trackerfw.route import Route
@@ -9,12 +10,17 @@ class Router(AbstractRouter):
 
         self.routes = []
 
+    async def not_found(self, request):
+        return web.HTTPNotFound()
+
     async def resolve(self, request):
         for route in self.routes:
             if route.matches(request):
                 return MatchInfo(route)
 
-        return MatchInfo()
+        return MatchInfo(Route(
+            self.not_found
+        ))
 
     def add(self, handler, **kwargs):
         self.routes.append(Route(handler, **kwargs))

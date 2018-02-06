@@ -21,6 +21,7 @@ The browser plugin fetches a list of URL patterns from a locally installed Pytho
 
 ## Features
 ### Currently working
+- List of URL patterns to block traffic or serve another Javascript file so that the website things the tracker is working
 - Firefox browser plugin (will be ported to Google Chrome as well)
 - Python aiohttp basic webserver including SSL support
 - Bit.ly auto-fetcher which uses the BitLy API to fetch the final URL

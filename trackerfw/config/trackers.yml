@@ -9,6 +9,8 @@ routes:
     routes:
       - stats.g.doubleclick.net/r/collect
       - cm.g.doubleclick.net/pixel
+      - googleads.g.doubleclick.net/*
+      - static.doubleclick.net/*
 
   - name: Google Ads (GoogleTag)
     routes:
@@ -168,6 +170,8 @@ routes:
   - name: Facebook
     routes:
       - www.facebook.com/plugins/like.php
+      - www.facebook.com/plugins/likebox.php
+      - www.facebook.com/plugins/page.php
       - connect.facebook.net/*
       - www.facebook.com/tr
 
@@ -234,3 +238,36 @@ routes:
 
   - name: Google CDN Logging
     route: csi.gstatic.com/*
+
+  - name: InterYield
+    route: www.ti553.com/*
+
+  - name: Bebi Media Beacon
+    routes:
+      - trck.bebi.com/*
+      - st.bebi.com/*
+
+  - name: Unknown Trackers
+    routes:
+      - "*.2mdnsys.com/*"
+
+  - name: AdForm Pixel
+    route: adx.adform.net/*
+
+  - name: Kisscartoon Ads
+    route: ad.kisscartoon.es/*
+
+  - name: OnClick Propeller Ads Media
+    route: onclkds.com/*
+
+  - name: Statuspage.io UA
+    route: ua.statuspage.io/*
+
+  - name: Bol.com Tracker
+    routes:
+      - swa.bol.com/*
+      - cspreport.bol.com/*
+      - "*.bltg.s-bol.com/*"
+
+  - name: Mpulse
+    route: "*.go-mpulse.net/*"

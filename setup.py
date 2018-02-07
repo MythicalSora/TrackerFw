@@ -6,7 +6,7 @@ with open(path.join(path.abspath(path.dirname(__file__)), 'README.md'), encoding
 
 setup(
     name='trackerfw',
-    version='0.0.1',
+    version='0.0.3',
     description='TrackerFw - firewall for trackers',
     long_description=long_description,
     url='https://github.com/PrivacySec/TrackerFw',

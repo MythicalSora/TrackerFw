@@ -1,93 +1,151 @@
-var beforeListener;
-var trackers = {};
-
-function proxyRequest(details) {
-    console.log('> proxy: ' + details.url);
-
-    if (!trackers[details.tabId]) {
-        trackers[details.tabId] = 0;
+/**
+ * Classes
+ */
+class WebsocketClient {
+    constructor() {
+        this.uri = 'wss://localhost:9999/$subscribe';
+        this.events = [];
     }
 
-    trackers[details.tabId]++;
+    on(event, listener) {
+        this.events.push({
+            name: event,
+            listener: listener
+        });
+    }
 
-    browser.runtime.sendMessage({
-        type: 'update-tracker-count',
-        tab_id: details.tabId,
-        count: trackers[details.tabId]
-    });
+    emit(eventName, data) {
+        this.events.forEach(event => {
+            if (event.name !== eventName) {
+                return;
+            }
 
-    browser.browserAction.setBadgeText({
-        text: trackers[details.tabId].toString(),
-        tabId: details.tabId
-    });
+            event.listener(data);
+        });
+    }
 
+    connect() {
+        this.ws = new WebSocket(this.uri);
+        this.bindEvents();
+    }
+
+    bindEvents() {
+        let reconnectTimer,
+            reconnect = () => {
+                try {
+                    this.ws.close();
+                } catch(e) {}
+
+                if (reconnectTimer) {
+                    clearTimeout(reconnectTimer);
+                }
+
+                reconnectTimer = setTimeout(() => {
+                    this.ws = null;
+                    this.connect();
+                }, 1000);
+            };
+
+
+        this.ws.onopen = () => {
+            
+        };
+
+        this.ws.onmessage = (event) => {
+            let data = JSON.parse(event.data);
+
+            this.emit(data.type, data.data);
+        };
+
+        this.ws.onerror = () => {
+            reconnect();
+        };
+
+        this.ws.onclose = () => {
+            reconnect();
+        };
+    }
+}
+
+
+/**
+ * Event handlers
+ */
+function proxyRequest(details) {
     return {
-        redirectUrl: 'https://localhost:9999/$route?uri=' + encodeURIComponent(details.url),
+        redirectUrl: 'https://localhost:9999/$route?uri=' + encodeURIComponent(details.url) + '&tab_id=' + details.tabId,
         upgradeToSecure: false
     };
 }
 
-function loadPatterns(callback) {
-    if (!callback) {
-        callback = () => {};
-    }
 
-    axios.get('https://localhost:9999/patterns').then(response => {
-        if (beforeListener) {
-            browser.webRequest.onBeforeRequest.removeListener(beforeListener);
-        }
+/**
+ * Global variables
+ */
+var beforeListener;
+var trackers = {};
+var websocket = new WebsocketClient();
 
-        beforeListener = proxyRequest;
 
-        browser.webRequest.onBeforeRequest.addListener(
-            beforeListener,
-            {
-                urls: response.data
-            },
-            ['blocking']
-        );
-
-        callback(null, response.data);
-    }).catch(function(e) {
-        callback(e, null);
-    });
-}
-
+/**
+ * Bind events
+ */
 browser.runtime.onMessage.addListener(message => {
-    console.log('> got message: ' + message.type);
-
     switch (message.type) {
         case 'reload':
-            loadPatterns((e, data) => {
-                console.log('> load-patterns', data);
-        
-                browser.notifications.create('trackerfw.notify', {
-                    'type': 'basic',
-                    'iconUrl': browser.extension.getURL('icons/TrackerFW-48.png'),
-                    'title': 'TrackerFw',
-                    'message': e === null ? 'Loaded ' + data.length + ' patterns' : 'No patterns loaded'
-                });
-            });
             break;
 
-        case 'send-tracker-count':
+        case 'sendTrackers':
             browser.runtime.sendMessage({
+                type: 'trackerList',
                 tab_id: message.tab_id,
-                type: 'update-tracker-count',
-                count: trackers[message.tab_id]
+                trackers: trackers[message.tab_id]
             });
             break;
     }
 });
 
 browser.webNavigation.onBeforeNavigate.addListener(details => {
-    trackers[details.tabId] = 0;
+    trackers[details.tabId] = [];
 });
 
 browser.browserAction.setBadgeBackgroundColor({
     color: '#444'
 });
 
-loadPatterns((e, data) => {
-    console.log('> load-patterns', data);
+
+/**
+ * Bind websocket events
+ */
+websocket.on('trackerFound', (details) => {
+    trackers[details.tab_id].push(details);
+
+    browser.browserAction.setBadgeText({
+        text: trackers[details.tab_id].length.toString(),
+        tabId: details.tabId
+    });
+
+    browser.runtime.sendMessage({
+        type: 'trackerList',
+        tab_id: details.tab_id,
+        trackers: trackers[details.tabId]
+    });
 });
+
+websocket.on('patternList', (patterns) => {
+    if (beforeListener) {
+        browser.webRequest.onBeforeRequest.removeListener(beforeListener);
+    }
+    
+    beforeListener = proxyRequest;
+    
+    browser.webRequest.onBeforeRequest.addListener(
+        beforeListener,
+        {
+            urls: patterns
+        },
+        ['blocking']
+    );
+});
+
+websocket.connect();

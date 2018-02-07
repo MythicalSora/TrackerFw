@@ -10,9 +10,9 @@ __all__ = ['FacebookShareBtn']
 class FacebookShareBtn(Module):
     @property
     def routes(self):
-        # TradeDoubler
         yield Route(
             self.handler,
+            { 'name': 'Facebook Share Button' },
             hostname='www.facebook.com',
             path='/plugins/share_button.php'
         )

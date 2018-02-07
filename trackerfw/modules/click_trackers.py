@@ -15,6 +15,7 @@ class RedirectUris(Module):
         # TradeDoubler
         yield Route(
             self.handler,
+            { 'name': 'TradeDoubler' },
             hostname='clk.tradedoubler.com',
             path='/click'
         )
@@ -23,6 +24,7 @@ class RedirectUris(Module):
         for ext in top_level_extensions:
             yield Route(
                 self.handler,
+                { 'name': 'Google URL (' + ext + ')' },
                 hostname='www.google' + ext,
                 path='/url'
             )
@@ -30,6 +32,7 @@ class RedirectUris(Module):
         # MailRD
         yield Route(
             self.handler,
+            { 'name': 'MailRD' },
             hostname='click.mailrd.net',
             path='/'
         )
@@ -57,6 +60,7 @@ class BitLy(Module):
     def routes(self):
         yield Route(
             self.handler,
+            { 'name': 'Bit.ly' },
             hostname='bit.ly',
         )
 

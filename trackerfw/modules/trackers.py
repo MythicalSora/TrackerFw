@@ -10,7 +10,7 @@ __all__ = ['Trackers']
 class Trackers(Module):
     @property
     def routes(self):
-        with open(self.basedir + 'config/trackers.yml', 'r') as file:
+        with open(self.webserver.basedir + 'config/trackers.yml', 'r') as file:
             config = yaml.load(file.read())
 
             for route in config['routes']:
@@ -33,6 +33,7 @@ class Trackers(Module):
 
                     yield Route(
                         handler,
+                        route,
                         hostname=hostname,
                         path='/' + path
                     )

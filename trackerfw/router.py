@@ -21,6 +21,3 @@ class Router(AbstractRouter):
         return MatchInfo(Route(
             self.not_found
         ))
-
-    def add(self, handler, **kwargs):
-        self.routes.append(Route(handler, **kwargs))

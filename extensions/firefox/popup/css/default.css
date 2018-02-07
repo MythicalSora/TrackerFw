@@ -60,3 +60,25 @@ ul li a.btn {
 ul li a.btn:hover {
     background-image: linear-gradient(to bottom, #fff, #f2f5f6);
 }
+
+.tracker-list {
+    margin: 11px 18px;
+}
+
+.tracker-list .tracker {
+    color: #444;
+    padding: 5px 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tracker-list .tracker .fas {
+    color: #000;
+    bottom: 2px;
+    font-size: 8px;
+    font-weight: bolder;
+    position: relative;
+}
+
+.tracker-list .tracker:last-child {
+    border-bottom: 0;
+}

@@ -1,6 +1,5 @@
 from contextlib import contextmanager
 from aiohttp.abc import AbstractMatchInfo
-from aiohttp.web_exceptions import HTTPNotFound
 
 class MatchInfo(AbstractMatchInfo):
     def __init__(self, route):
@@ -16,7 +15,10 @@ class MatchInfo(AbstractMatchInfo):
     def freeze(self): pass
 
     def get_info(self):
-        return self._route.__dict__
+        if self._route.details == None:
+            return None
+
+        return self._route.details
 
     @contextmanager
     def set_current_app(self, app):

@@ -6,14 +6,40 @@ import aiohttp_jinja2
 
 from aiohttp import web
 from urllib.parse import unquote, urlparse
+from threading import Lock
 from trackerfw.router import Router
 
 class Webserver(object):
     def __init__(self):
+        self.app = None
         self._modules = None
+        self._websockets = []
+        self._ws_lock = Lock()
         self.router = Router()
         self._ssl_context = None
         self.basedir = os.path.dirname(os.path.realpath(__file__)) + '/'
+
+    @property
+    def websockets(self):
+        with self._ws_lock:
+            return [ws for ws in self._websockets]
+
+    async def close_websockets(self, app):
+        sockets = self.websockets
+
+        for sock in sockets:
+            try:
+                await sock.close()
+            except: pass
+
+    async def send_websockets(self, event, data):
+        sockets = self.websockets
+
+        for sock in sockets:
+            await sock.send_json({
+                'type': event,
+                'data': data
+            })
 
     def _load_modules(self, name):
         spec = importlib.util.spec_from_file_location(
@@ -24,7 +50,7 @@ class Webserver(object):
         spec.loader.exec_module(py_module)
 
         for key in py_module.__all__:
-            yield getattr(py_module, key)(self.basedir)
+            yield getattr(py_module, key)(self)
 
     @property
     def ssl_context(self):
@@ -50,22 +76,77 @@ class Webserver(object):
 
         return self._modules
 
+    async def send_patterns(self, ws):
+        await ws.send_json({
+            'type': 'patternList',
+            'data': [
+                pattern for pattern in [
+                    route.pattern for route in self.router.routes
+                ] if pattern != None
+            ]
+        })
+
+    @web.middleware
+    async def send_tracker(self, request, handler):
+        response = await handler(request)
+        details = request.match_info.get_info()
+
+        if details != None and 'X-Tab-Id' in request.headers:
+            details['tab_id'] = int(request.headers['X-Tab-Id'])
+
+            await self.send_websockets('trackerFound', details)
+
+        return response
+
+    @web.middleware
+    async def subscribe(self, request, handler):
+        if request.path != '/$subscribe':
+            return await handler(request)
+
+        print('> client connected')
+
+        ws = web.WebSocketResponse()
+        
+        await ws.prepare(request)
+        await self.send_patterns(ws)
+
+        with self._ws_lock:
+            self._websockets.append(ws)
+
+        async for msg in ws:
+            if msg.type == aiohttp.WSMsgType.TEXT:
+                if msg.data == 'close':
+                    await ws.close()
+            elif msg.type == aiohttp.WSMsgType.ERROR:
+                await ws.close()
+
+        print('> client disconnected')
+
+        with self._ws_lock:
+            self._websockets = [w for w in self._websockets if not w.closed]
+
+        return ws
+
     @web.middleware
     async def reroute(self, request, handler):
         if request.path == '/$route':
             raw_uri = unquote(request.query['uri'])
             uri = urlparse(raw_uri)
-            new_request = request.clone(
+            hostname = uri.netloc.split(':')[0]
+            headers = request.headers
+
+            if 'tab_id' in request.query:
+                headers['X-Tab-Id'] = request.query['tab_id']
+
+            headers['Host'] = hostname
+
+            return await self.app._handle(request.clone(
                 rel_url=raw_uri,
-                method=request.method,
                 scheme=uri.scheme,
-                host=uri.netloc.split(':')[0]
-            )
-
-            router = request.match_info.current_app.router
-            match_info = await router.resolve(new_request)
-
-            return await match_info.handler(new_request)
+                method=request.method,
+                headers=headers,
+                host=hostname
+            ))
 
         return await handler(request)
 
@@ -74,20 +155,24 @@ class Webserver(object):
             for route in module.routes:
                 self.router.routes.append(route)
 
-        app = web.Application(
+        self.app = web.Application(
             router=self.router,
             middlewares=[
-                self.reroute
+                self.reroute,
+                self.send_tracker,
+                self.subscribe
             ]
         )
 
+        self.app.on_cleanup.append(self.close_websockets)
+
         aiohttp_jinja2.setup(
-            app,
+            self.app,
             loader=jinja2.PackageLoader('trackerfw', 'templates')
         )
 
         web.run_app(
-            app,
+            self.app,
             port=port,
             host=host,
             ssl_context=self.ssl_context

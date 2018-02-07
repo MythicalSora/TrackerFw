@@ -1,8 +1,9 @@
 import re
 
 class Route(object):
-    def __init__(self, handler, **kwargs):
+    def __init__(self, handler, details=None, **kwargs):
         self.filters = kwargs
+        self.details = details
         self.handler = handler
 
     @property

@@ -15,9 +15,12 @@
             Can't fetch list of blocked trackers
         </p>
 
-        <p v-show="count > 0">
-            Tracker details are not currently shown
-        </p>
+        <div class="tracker-list" v-show="count > 0">
+            <div v-for="tracker in trackers" :key="tracker.name" class="tracker">
+                <i class="fas fa-chevron-right"></i>
+                {{ tracker.name }}
+            </div>
+        </div>
 
         <ul>
             <li>
@@ -46,6 +49,9 @@ export default {
     },
 
     computed: {
+        count() {
+            return this.trackers.length;
+        }
     },
 
     created() {
@@ -55,16 +61,16 @@ export default {
             this.tab_id = tabs[0].id;
 
             browser.runtime.sendMessage({
-                type: 'send-tracker-count',
+                type: 'sendTrackers',
                 tab_id: this.tab_id
             });
         });
 
         browser.runtime.onMessage.addListener(message => {
             switch (message.type) {
-                case 'update-tracker-count':
+                case 'trackerList':
                     if (message.tab_id == this.tab_id) {
-                        this.count = message.count;
+                        this.trackers = message.trackers;
                     }
                     break;
             }
@@ -73,8 +79,8 @@ export default {
 
     data() {
         return {
-            count: null,
-            tab_id: null
+            tab_id: null,
+            trackers: []
         };
     }
 }

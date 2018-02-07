@@ -114,16 +114,12 @@ class Webserver(object):
             self._websockets.append(ws)
 
         async for msg in ws:
-            print('ws> pre for loop')
             if msg.type == aiohttp.WSMsgType.TEXT:
                 if msg.data == 'close':
                     await ws.close()
             elif msg.type == aiohttp.WSMsgType.ERROR:
-                print('ws> waiting for close')
                 await ws.close()
             
-            print('ws> post for loop')
-
         print('> client disconnected')
 
         with self._ws_lock:

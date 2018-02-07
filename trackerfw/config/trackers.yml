@@ -11,6 +11,7 @@ routes:
       - cm.g.doubleclick.net/pixel
       - googleads.g.doubleclick.net/*
       - static.doubleclick.net/*
+      - ad.doubleclick.net/*
 
   - name: Google Ads (GoogleTag)
     routes:
@@ -251,6 +252,7 @@ routes:
   - name: Unknown Trackers
     routes:
       - "*.2mdnsys.com/*"
+      - 178.175.132.130/script/*
 
   - name: AdForm Pixel
     route: adx.adform.net/*
@@ -281,3 +283,11 @@ routes:
 
   - name: Stackoverflow Timeout
     route: clc.stackoverflow.com/timeout.gif
+
+  - name: AddThis
+    routes:
+      - "*.addthis.com/js/*"
+      - m.addthis.com/live/*
+      - m.addthisedge.com/live/*
+
+

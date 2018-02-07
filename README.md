@@ -1,7 +1,5 @@
 # ![Logo](extensions/firefox/icons/TrackerFW-48.svg) TrackerFw - <small>Intelligent Firewall for trackers</small>
 
-**Note: This open-source project is stable but not ready for production usage**
-
 ## Installation
 Since TrackerFw is work-in-progress we haven't created official builds yet nor have we published it to pypi.
 If you want to check it out you can install it using the following steps:
@@ -53,6 +51,9 @@ The browser plugin fetches a list of URL patterns from a locally installed Pytho
 - Auto remove URL parts that invade privacy (UTM codes etc.)
 - Add A LOT of trackers
 
-## Python
+## Support
+We succesfully tested TrackerFw on Linux and Windows.
+Mac Osx should be supported as well.
+
 The webserver is written in Python, you need at least python 3.5 or higher.
 We will **never** support Python 2.

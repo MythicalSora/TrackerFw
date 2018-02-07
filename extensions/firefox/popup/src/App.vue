@@ -60,8 +60,6 @@ export default {
         }).then(tabs => {
             this.tab_id = tabs[0].id;
 
-            console.log('< asking to sent trackers for', this.tab_id);
-
             browser.runtime.sendMessage({
                 type: 'sendTrackers',
                 tab_id: this.tab_id

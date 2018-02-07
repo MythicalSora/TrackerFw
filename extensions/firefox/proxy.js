@@ -122,13 +122,13 @@ websocket.on('trackerFound', (details) => {
 
     browser.browserAction.setBadgeText({
         text: trackers[details.tab_id].length.toString(),
-        tabId: details.tabId
+        tabId: details.tab_id
     });
 
     browser.runtime.sendMessage({
         type: 'trackerList',
         tab_id: details.tab_id,
-        trackers: trackers[details.tabId]
+        trackers: trackers[details.tab_id]
     });
 });
 

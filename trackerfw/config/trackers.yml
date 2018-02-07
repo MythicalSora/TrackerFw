@@ -26,6 +26,7 @@ routes:
       - beacon.krxd.net/*
       - cdn.krxd.net/controltag
       - cdn.krxd.net/userdata/*
+      - s0.2mdn.net/*
 
   - name: Gigya
     route: cdns.gigya.com/js/gigya.js
@@ -274,3 +275,9 @@ routes:
 
   - name: Roblox
     route: ecsv2.roblox.com/www/e.png
+
+  - name: Quantcast Measurement Service
+    route: secure.quantserve.com/quant.js
+
+  - name: Stackoverflow Timeout
+    route: clc.stackoverflow.com/timeout.gif

@@ -18,7 +18,7 @@ There is also a systemd service file present in the project.
 
 ### Browser plugin
 Only the Firefox browser plugin is available at the moment but it will be ported to Google Chrome as well (which should be quite easy since they seem to use the same webExtensions API).
-The first alpha version of the firefox browser plugin can be downloaded using [Github Releases](https://github.com/PrivacySec/TrackerFw/releases/tag/0.0.2).
+The first alpha version of the firefox browser plugin can be downloaded using [Github Releases](https://github.com/PrivacySec/TrackerFw/releases/).
 
 ## What?
 TrackerFw is a software firewall for trackers. It includes a browser plugin which routes all traffic that invades the user its privacy to a local python server. Instead of only cancelling all bad traffic we want to make sure most (if not all) websites keep working but just don't invade your privacy.

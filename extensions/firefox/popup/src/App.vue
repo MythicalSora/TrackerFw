@@ -12,7 +12,7 @@
         </h1>
 
         <p v-show="count == 0">
-            Can't fetch list of blocked trackers
+            No trackers found
         </p>
 
         <div class="tracker-list" v-show="count > 0">

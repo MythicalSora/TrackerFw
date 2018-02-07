@@ -73,7 +73,7 @@ class WebsocketClient {
  */
 function proxyRequest(details) {
     return {
-        redirectUrl: 'https://localhost:9999/$route?uri=' + encodeURIComponent(details.url) + '&tab_id=' + details.tabId,
+        redirectUrl: 'https://localhost:9999/$route?uri=' + encodeURIComponent(details.url) + '&session_id=' + details.tabId + ':' + details.frameId,
         upgradeToSecure: false
     };
 }
@@ -106,6 +106,10 @@ browser.runtime.onMessage.addListener(message => {
 });
 
 browser.webNavigation.onBeforeNavigate.addListener(details => {
+    if (details.frameId > 0) {
+        return;
+    }
+
     trackers[details.tabId] = [];
 });
 
@@ -118,17 +122,22 @@ browser.browserAction.setBadgeBackgroundColor({
  * Bind websocket events
  */
 websocket.on('trackerFound', (details) => {
-    trackers[details.tab_id].push(details);
+    let [tab_id, frame_id] = details.session_id.split(':');
+
+    tab_id = parseInt(tab_id);
+
+    trackers[tab_id].push(details);
 
     browser.browserAction.setBadgeText({
-        text: trackers[details.tab_id].length.toString(),
-        tabId: details.tab_id
+        text: trackers[tab_id].length.toString(),
+        tabId: tab_id
     });
 
     browser.runtime.sendMessage({
+        tab_id: tab_id,
+        frame_id: frame_id,
         type: 'trackerList',
-        tab_id: details.tab_id,
-        trackers: trackers[details.tab_id]
+        trackers: trackers[tab_id]
     });
 });
 

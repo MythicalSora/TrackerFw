@@ -60,6 +60,8 @@ export default {
         }).then(tabs => {
             this.tab_id = tabs[0].id;
 
+            console.log('< asking to sent trackers for', this.tab_id);
+
             browser.runtime.sendMessage({
                 type: 'sendTrackers',
                 tab_id: this.tab_id
@@ -79,8 +81,8 @@ export default {
 
     data() {
         return {
-            tab_id: null,
-            trackers: []
+            trackers: [],
+            tab_id: null
         };
     }
 }

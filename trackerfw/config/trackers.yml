@@ -221,3 +221,16 @@ routes:
 
   - name: Google+ PlusOne
     route: apis.google.com/js/plusone.js
+
+  - name: OneSignal Push Notifications
+    route: cdn.onesignal.com/sdks/OneSignalSDK.js
+    file: one-signal-sdk.js
+
+  - name: Atlassian Analytics
+    route: analytics.atlassian.com/analytics/events
+
+  - name: Atlassian Cloud Analytics
+    route: "*.atlassian.net/rest/analytics/*"
+
+  - name: Google CDN Logging
+    route: csi.gstatic.com/*

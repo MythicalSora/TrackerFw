@@ -91,8 +91,8 @@ class Webserver(object):
         response = await handler(request)
         details = request.match_info.get_info()
 
-        if details != None and 'X-Tab-Id' in request.headers:
-            details['tab_id'] = int(request.headers['X-Tab-Id'])
+        if details != None and 'X-Session-Id' in request.headers:
+            details['session_id'] = request.headers['X-Session-Id']
 
             await self.send_websockets('trackerFound', details)
 
@@ -135,8 +135,8 @@ class Webserver(object):
             hostname = uri.netloc.split(':')[0]
             headers = request.headers
 
-            if 'tab_id' in request.query:
-                headers['X-Tab-Id'] = request.query['tab_id']
+            if 'session_id' in request.query:
+                headers['X-Session-Id'] = request.query['session_id']
 
             headers['Host'] = hostname
 

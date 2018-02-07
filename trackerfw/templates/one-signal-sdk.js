@@ -1,0 +1,3 @@
+window.OneSignal = {
+    push: function() {}
+};

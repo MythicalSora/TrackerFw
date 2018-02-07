@@ -271,3 +271,6 @@ routes:
 
   - name: Mpulse
     route: "*.go-mpulse.net/*"
+
+  - name: Roblox
+    route: ecsv2.roblox.com/www/e.png

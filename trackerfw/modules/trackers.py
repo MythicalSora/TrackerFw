@@ -1,3 +1,4 @@
+import os
 import yaml
 import aiohttp_jinja2
 
@@ -8,9 +9,26 @@ from trackerfw.module import Module
 __all__ = ['Trackers']
 
 class Trackers(Module):
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.config_location = self.get_config_location()
+
+    def get_config_location(self):
+        locations = [
+            os.environ['HOME'] + '/.trackers.yml',
+            self.webserver.basedir + 'config/trackers.yml'
+        ]
+
+        for location in locations:
+            if os.path.exists(location):
+                return location
+
+        raise Exception('Tracker list wasn\'t found')
+
     @property
     def routes(self):
-        with open(self.webserver.basedir + 'config/trackers.yml', 'r') as file:
+        with open(self.config_location, 'r') as file:
             config = yaml.load(file.read())
 
             for route in config['routes']:

@@ -1,10 +1,17 @@
 # ![Logo](extensions/firefox/icons/TrackerFW-48.svg) TrackerFw - <small>Intelligent Firewall for trackers</small>
 
 ## Installation
-Since TrackerFw is work-in-progress we haven't created official builds yet nor have we published it to pypi.
-If you want to check it out you can install it using the following steps:
 
 ### Webserver
+
+You can install TrackerFw from PyPi using `pip`:
+
+```bash
+pip install trackerfw
+```
+
+For testing you can install it locally:
+
 ```bash
 git clone https://github.com/PrivacySec/TrackerFw.git
 cd TrackerFw
@@ -12,7 +19,8 @@ pip install -e .
 ```
 
 After this you can run the webserver using the `trackerfw` command.
-There is also a systemd service file present in the project.
+There is also a systemd service file present in the project if you want to autostart the webserver.
+We are working on packages for Linux and Windows.
 
 ### Browser plugin
 Only the Firefox browser plugin is available at the moment but it will be ported to Google Chrome as well (which should be quite easy since they seem to use the same webExtensions API).

@@ -1,0 +1,50 @@
+ads:
+  name: Advertisement
+
+stats:
+  name: Statistics
+
+auth:
+  name: Authentication Provider
+
+brand:
+  name: Brand Protection
+
+chat:
+  name: Support Chat
+
+abtest:
+  name: A/B Testing
+
+survey:
+  name: Survey
+
+unknown:
+  name: Unknown Trackers
+
+mon:
+  name: (Performance) Monitor
+
+audience:
+  name: Audience Measurement
+
+recommend:
+  name: Recommendation Service
+
+social:
+  name: Social
+
+share:
+  name: Share Button/Plugin
+
+data:
+  name: Datamanagement
+
+notify:
+  name: (Push) Notification Service
+
+virus:
+  name: Virus/Malware
+
+other:
+  name: Other

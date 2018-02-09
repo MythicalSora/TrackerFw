@@ -251,6 +251,9 @@ routes:
   - name: Unknown Trackers
     routes:
       - "*.2mdnsys.com/*"
+      - "*.amgload.net/*"
+      - "*.piguiqproxy.com/*"
+      - "*.smcheck.org/*"
 
   - name: AdForm Pixel
     route: adx.adform.net/*
@@ -281,3 +284,7 @@ routes:
 
   - name: Stackoverflow Timeout
     route: clc.stackoverflow.com/timeout.gif
+
+  - name: WatchSeries
+    route: dwatchseries.to/show/get-tracking-data
+
